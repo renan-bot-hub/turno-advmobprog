@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'product_screen.dart';
+import 'cart_screen.dart';
 
 import '../widgets/custom_text.dart';
 
@@ -47,20 +48,26 @@ class _HomeScreenState extends State<HomeScreen> {
         body: PageView(
           physics: const NeverScrollableScrollPhysics(),
           controller: _pageController,
-          children: const <Widget>[ProductScreen()],
+          children: const <Widget>[ProductScreen(), CartScreen(), SizedBox()],
           onPageChanged: (page) {
             setState(() {
               _selectedIndex = page;
             });
           },
         ),
+        floatingActionButton: _selectedIndex == 1
+            ? null
+            : FloatingActionButton(
+                onPressed: () {},
+                child: const Icon(Icons.chat),
+              ),
         bottomNavigationBar: BottomNavigationBar(
           showSelectedLabels: false, //selected item
           showUnselectedLabels: false, //unselected item
           onTap: _onTappedBar,
           items: const [
             BottomNavigationBarItem(icon: Icon(Icons.shop_2), label: 'Shop'),
-            BottomNavigationBarItem(icon: Icon(Icons.chat), label: 'Chat'),
+            BottomNavigationBarItem(icon: Icon(Icons.shopping_cart), label: 'Cart'),
             BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
           ],
           currentIndex: _selectedIndex,

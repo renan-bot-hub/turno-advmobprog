@@ -17,7 +17,7 @@ void main() async {
 
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then(
     (_) async {
-      await dotenv.load(fileName: 'assets/.env');
+      await dotenv.load(fileName: '.env');
       runApp(const StudentAdvMobProg());
     }
   );

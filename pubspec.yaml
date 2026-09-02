@@ -1,4 +1,4 @@
-name: student_advmobprog # your project name
+name: turno_advmobprog # your project name
 description: "A new Flutter project."
 publish_to: 'none'
 version: 0.1.0
@@ -11,7 +11,7 @@ dependencies:
     sdk: flutter
   flutter_dotenv: ^5.2.1
   flutter_screenutil: ^5.9.3
-  http: ^1.1.0
+  http: ^1.5.0
   provider: ^6.1.5
 
 dev_dependencies:
@@ -23,7 +23,7 @@ flutter:
   assets:
     - assets/
     - assets/images/
-    - assets/.env
+    - .env
   fonts:
     - family: Poppins
       fonts:
