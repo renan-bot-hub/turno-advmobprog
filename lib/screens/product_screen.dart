@@ -22,11 +22,18 @@ class ProductScreen extends StatefulWidget {
 
 class _ProductScreenState extends State<ProductScreen> {
   late final Future<List<Product>> _productsFuture;
+  String _searchQuery = '';
 
   @override
   void initState() {
     super.initState();
     _productsFuture = ProductService().getAllProducts();
+  }
+
+  void _filterProducts(String query) {
+    setState(() {
+      _searchQuery = query.trim().toLowerCase();
+    });
   }
 
   @override
@@ -39,6 +46,7 @@ class _ProductScreenState extends State<ProductScreen> {
           children: [
             // Enhancement 1: Add search bar above the article list.
             TextField(
+              onChanged: _filterProducts,
               decoration: InputDecoration(
                 hintText: 'Search products...',
                 prefixIcon: const Icon(Icons.search),
@@ -70,7 +78,9 @@ class _ProductScreenState extends State<ProductScreen> {
                   );
                 }
 
-                final products = snapshot.data ?? [];
+                final products = (snapshot.data ?? [])
+                  .where((product) => product.title.toLowerCase().contains(_searchQuery))
+                  .toList();
                 if (products.isEmpty) {
                   return Center(
                     child: CustomText(
