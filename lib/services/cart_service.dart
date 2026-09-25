@@ -4,6 +4,7 @@ import '../constants.dart';
 import '../models/cart.dart';
 
 class CartService {
+  // Enhancement 1: Fetch carts from the new API endpoint for cart_screen.
   Future<List<Cart>> getAllCarts() async {
     final response = await http.get(Uri.parse('$host/carts'));
 

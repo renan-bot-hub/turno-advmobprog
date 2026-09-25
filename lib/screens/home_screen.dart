@@ -55,6 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
             });
           },
         ),
+        // Enhancement 2: Hide the chat FloatingActionButton on the cart screen.
         floatingActionButton: _selectedIndex == 1
             ? null
             : FloatingActionButton(

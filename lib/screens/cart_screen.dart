@@ -20,6 +20,7 @@ class _CartScreenState extends State<CartScreen> {
   @override
   void initState() {
     super.initState();
+    // Enhancement 1: Render cart items from the new carts API endpoint.
     _cartFuture = _cartService.getAllCarts();
   }
 
@@ -78,6 +79,7 @@ class _CartScreenState extends State<CartScreen> {
                       ],
                     ),
                     onTap: () {
+                      // Enhancement 1: Make cart items clickable to open the detail screen.
                       final product = Product(
                         id: cartProduct.id,
                         title: cartProduct.title,
