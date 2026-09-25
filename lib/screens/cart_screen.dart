@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../models/cart.dart';
 import '../models/product.dart';
 import '../services/cart_service.dart';
+import '../services/user_service.dart';
 import '../widgets/custom_text.dart';
 import 'detail_screen.dart';
 
@@ -15,13 +16,22 @@ class CartScreen extends StatefulWidget {
 
 class _CartScreenState extends State<CartScreen> {
   final CartService _cartService = CartService();
+  final UserService _userService = UserService();
   late Future<List<Cart>> _cartFuture;
 
   @override
   void initState() {
     super.initState();
-    // Enhancement 1: Render cart items from the new carts API endpoint.
-    _cartFuture = _cartService.getAllCarts();
+    // Enhancement 3: Render the cart belonging to the saved user.
+    _cartFuture = _loadSavedUserCart();
+  }
+
+  Future<List<Cart>> _loadSavedUserCart() async {
+    final user = await _userService.getUserData();
+    if (user == null) {
+      throw Exception('No saved user found');
+    }
+    return _cartService.getCartByUserId(user.id);
   }
 
   @override
