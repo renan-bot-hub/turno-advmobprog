@@ -12,7 +12,7 @@ import 'package:turno_advmobprog/main.dart';
 
 void main() {
   testWidgets('app loads successfully', (WidgetTester tester) async {
-    await tester.pumpWidget(const StudentAdvMobProg());
+    await tester.pumpWidget(const TurnoAdvMobProg());
 
     expect(find.byType(MaterialApp), findsOneWidget);
   });

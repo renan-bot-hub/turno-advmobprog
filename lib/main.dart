@@ -18,13 +18,13 @@ void main() async {
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then(
     (_) async {
       await dotenv.load(fileName: '.env');
-      runApp(const StudentAdvMobProg());
+      runApp(const TurnoAdvMobProg());
     }
   );
 }
 
-class StudentAdvMobProg extends StatelessWidget {
-  const StudentAdvMobProg({super.key});
+class TurnoAdvMobProg extends StatelessWidget {
+  const TurnoAdvMobProg({super.key});
 
   @override
   Widget build(BuildContext context) {
