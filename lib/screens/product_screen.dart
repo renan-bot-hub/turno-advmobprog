@@ -11,7 +11,7 @@ import '../services/product_service.dart';
 import '../widgets/custom_text.dart';
 
 // screens
-import 'product_details.dart';
+import 'detail_screen.dart';
 
 class ProductScreen extends StatefulWidget {
   const ProductScreen({super.key});

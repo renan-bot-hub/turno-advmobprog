@@ -41,7 +41,6 @@ class ProductDetailsScreen extends StatelessWidget {
                     text: '\$${product.price.toStringAsFixed(2)}',
                     fontSize: 20.sp,
                     fontWeight: FontWeight.w600,
-                    // color: Colors.green,
                   ),
                   SizedBox(height: 16.h),
                   CustomText(

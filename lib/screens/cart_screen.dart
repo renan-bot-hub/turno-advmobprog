@@ -4,7 +4,7 @@ import '../models/cart.dart';
 import '../models/product.dart';
 import '../services/cart_service.dart';
 import '../widgets/custom_text.dart';
-import 'product_details.dart';
+import 'detail_screen.dart';
 
 class CartScreen extends StatefulWidget {
   const CartScreen({super.key});
