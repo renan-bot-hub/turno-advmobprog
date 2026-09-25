@@ -20,7 +20,7 @@ class _CartScreenState extends State<CartScreen> {
   @override
   void initState() {
     super.initState();
-    _cartFuture = _cartService.getCartByUserId(5);
+    _cartFuture = _cartService.getAllCarts();
   }
 
   @override
