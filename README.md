@@ -1,12 +1,4 @@
-# Flutter E-Commerce Application
-
-A new Flutter project built for Lab Activity 2.
-
-## Laboratory Discussion
-
-### Lab Activity 2: discussion
-
-In this activity, the application follows a modular design pattern that separates concerns to effectively render data from an API endpoint:
+# turno-advmobprog
 
 - **Model** (`product.dart`): Defines the data structure. It maps JSON data from the API into strongly-typed Dart objects.
 - **Service** (`product_service.dart`): Handles the data fetching logic. It makes the HTTP GET request to the API endpoint, decodes the JSON response, and utilizes the Model's `fromJson` factory to return a list of `Product` objects.
