@@ -7,6 +7,10 @@ import '../constants.dart';
 import '../models/user.dart';
 
 class UserService {
+	Future<User> loginUser(String username, String password) {
+		return login(username, password);
+	}
+
 	Future<User> login(String username, String password) async {
 		final response = await http.post(
 			Uri.parse('$host/auth/login'),
