@@ -54,7 +54,8 @@ class Product {
       description: json['description'] ?? '',
       category: json['category'] ?? '',
       price: (json['price'] as num?)?.toDouble() ?? 0.0,
-      discountPercentage: (json['discountPercentage'] as num?)?.toDouble() ?? 0.0,
+      discountPercentage:
+          (json['discountPercentage'] as num?)?.toDouble() ?? 0.0,
       rating: (json['rating'] as num?)?.toDouble() ?? 0.0,
       stock: json['stock'] ?? 0,
       tags: List<String>.from(json['tags'] ?? []),
@@ -65,7 +66,8 @@ class Product {
       warrantyInformation: json['warrantyInformation'] ?? '',
       shippingInformation: json['shippingInformation'] ?? '',
       availabilityStatus: json['availabilityStatus'] ?? '',
-      reviews: (json['reviews'] as List?)
+      reviews:
+          (json['reviews'] as List?)
               ?.map((e) => ProductReview.fromJson(e))
               .toList() ??
           [],

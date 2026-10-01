@@ -6,12 +6,14 @@ import '../models/product.dart';
 
 // services
 import '../services/product_service.dart';
-
-// widgets
-import '../widgets/custom_text.dart';
+import '../utils/error_message.dart';
+import '../widgets/php_price_text.dart';
 
 // screens
 import 'detail_screen.dart';
+
+// widgets
+import '../widgets/custom_text.dart';
 
 class ProductScreen extends StatefulWidget {
   const ProductScreen({super.key});
@@ -21,7 +23,10 @@ class ProductScreen extends StatefulWidget {
 }
 
 class _ProductScreenState extends State<ProductScreen> {
-  late final Future<List<Product>> _productsFuture;
+  late Future<List<Product>> _productsFuture;
+
+  // Lab Activity 2 - Enhancement 1: holds the current search bar text used to filter the product list.
+  final TextEditingController _searchController = TextEditingController();
   String _searchQuery = '';
 
   @override
@@ -30,10 +35,10 @@ class _ProductScreenState extends State<ProductScreen> {
     _productsFuture = ProductService().getAllProducts();
   }
 
-  void _filterProducts(String query) {
-    setState(() {
-      _searchQuery = query.trim().toLowerCase();
-    });
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
   }
 
   @override
@@ -44,16 +49,24 @@ class _ProductScreenState extends State<ProductScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Enhancement 1: Add search bar above the article list.
+            // Lab Activity 2 - Enhancement 1: Search bar above the product list, filters the
             TextField(
-              onChanged: _filterProducts,
+              controller: _searchController,
+              onChanged: (value) {
+                setState(() {
+                  _searchQuery = value;
+                });
+              },
               decoration: InputDecoration(
-                hintText: 'Search products...',
-                prefixIcon: const Icon(Icons.search),
+                hintText: 'Search',
+                prefixIcon: Icon(Icons.search, size: 20.sp),
+                contentPadding: EdgeInsets.symmetric(
+                  horizontal: 16.w,
+                  vertical: 12.h,
+                ),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12.r),
                 ),
-                contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
               ),
             ),
             SizedBox(height: 16.h),
@@ -69,22 +82,52 @@ class _ProductScreenState extends State<ProductScreen> {
                   );
                 }
 
+                // Lab Activity 6: readable error with a Retry button.
                 if (snapshot.hasError) {
                   return Center(
-                    child: CustomText(
-                      text: 'Error: ${snapshot.error}',
-                      fontSize: 14.sp,
+                    child: Padding(
+                      padding: EdgeInsets.all(24.r),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          CustomText(
+                            text: errorMessage(snapshot.error),
+                            fontSize: 14.sp,
+                            textAlign: TextAlign.center,
+                          ),
+                          SizedBox(height: 12.h),
+                          ElevatedButton.icon(
+                            onPressed: () => setState(() {
+                              _productsFuture = ProductService()
+                                  .getAllProducts();
+                            }),
+                            icon: const Icon(Icons.refresh),
+                            label: const Text('Retry'),
+                          ),
+                        ],
+                      ),
                     ),
                   );
                 }
 
-                final products = (snapshot.data ?? [])
-                  .where((product) => product.title.toLowerCase().contains(_searchQuery))
-                  .toList();
+                final allProducts = snapshot.data ?? [];
+                // Lab Activity 2 - Enhancement 1: filter the fetched products by the search query.
+                final products = _searchQuery.isEmpty
+                    ? allProducts
+                    : allProducts
+                          .where(
+                            (product) => product.title.toLowerCase().contains(
+                              _searchQuery.toLowerCase(),
+                            ),
+                          )
+                          .toList();
+
                 if (products.isEmpty) {
                   return Center(
                     child: CustomText(
-                      text: 'No products found.',
+                      text: _searchQuery.isEmpty
+                          ? 'No products found.'
+                          : 'No results for "$_searchQuery".',
                       fontSize: 14.sp,
                     ),
                   );
@@ -98,26 +141,31 @@ class _ProductScreenState extends State<ProductScreen> {
                     crossAxisCount: 2,
                     crossAxisSpacing: 10.w,
                     mainAxisSpacing: 10.h,
-                    childAspectRatio: 0.75,
+                    childAspectRatio: 0.78,
                   ),
                   itemBuilder: (context, index) {
                     final product = products[index];
-                    return GestureDetector(
-                      onTap: () {
-                        // Enhancement 2: Add details page when clicked the card.
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ProductDetailsScreen(product: product),
-                          ),
-                        );
-                      },
-                      child: Card(
-                        elevation: 2,
-                        clipBehavior: Clip.antiAlias,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12.r),
+                    return Card(
+                      elevation: 0,
+                      clipBehavior: Clip.antiAlias,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(14.r),
+                        side: BorderSide(
+                          color: Theme.of(context).colorScheme.outlineVariant,
                         ),
+                      ),
+                      child: InkWell(
+                        // Lab Activity 2 - Enhancement 2: tapping a product card opens its
+                        // details page.
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  DetailScreen(product: product),
+                            ),
+                          );
+                        },
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -126,8 +174,30 @@ class _ProductScreenState extends State<ProductScreen> {
                                 product.thumbnail,
                                 fit: BoxFit.cover,
                                 width: double.infinity,
-                                errorBuilder: (_, __, ___) =>
-                                    Icon(Icons.image, size: 24.sp),
+                                loadingBuilder: (context, child, progress) {
+                                  if (progress == null) return child;
+                                  return Center(
+                                    child: SizedBox(
+                                      width: 24.w,
+                                      height: 24.w,
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 2,
+                                        value:
+                                            progress.expectedTotalBytes != null
+                                            ? progress.cumulativeBytesLoaded /
+                                                  progress.expectedTotalBytes!
+                                            : null,
+                                      ),
+                                    ),
+                                  );
+                                },
+                                errorBuilder: (context, error, stackTrace) =>
+                                    Center(
+                                      child: Icon(
+                                        Icons.image_not_supported,
+                                        size: 24.sp,
+                                      ),
+                                    ),
                               ),
                             ),
                             Padding(
@@ -138,15 +208,20 @@ class _ProductScreenState extends State<ProductScreen> {
                                   CustomText(
                                     text: product.title,
                                     fontSize: 14.sp,
-                                    fontWeight: FontWeight.bold,
+                                    fontWeight: FontWeight.w600,
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                   SizedBox(height: 4.h),
-                                  CustomText(
-                                    text: '\$${product.price.toStringAsFixed(2)}',
-                                    fontSize: 13.sp,
-                                    fontWeight: FontWeight.w600,
+                                  PhpPriceText(
+                                    usdAmount: product.price,
+                                    style: TextStyle(
+                                      fontSize: 13.sp,
+                                      fontWeight: FontWeight.w600,
+                                      color: Theme.of(
+                                        context,
+                                      ).colorScheme.primary,
+                                    ),
                                   ),
                                 ],
                               ),

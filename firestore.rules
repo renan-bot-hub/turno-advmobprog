@@ -1,0 +1,21 @@
+rules_version = '2';
+
+// Lab Activity 6: Only logged-in users can read/write the chat data.
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Chat list: anyone logged in can see users, but you can only edit your own.
+    match /Users/{uid} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null && request.auth.uid == uid;
+    }
+
+    // Messages: only the two people in the chat room (room id = "uidA_uidB").
+    match /chat_rooms/{roomId}/messages/{messageId} {
+      allow read, update: if request.auth != null
+        && request.auth.uid in roomId.split('_');
+      allow create: if request.auth != null
+        && request.auth.uid in roomId.split('_')
+        && request.resource.data.senderId == request.auth.uid;
+    }
+  }
+}

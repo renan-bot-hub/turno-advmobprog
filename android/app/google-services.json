@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "622422915547",
+    "project_id": "turno-advmobprog",
+    "storage_bucket": "turno-advmobprog.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:622422915547:android:62697696ea9d43b9588ffe",
+        "android_client_info": {
+          "package_name": "com.example.student_advmobprog"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCcnIMyxnOMDYsG7TuwbgafAip49gTJVek"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,24 +1,22 @@
 class User {
   final int id;
   final String username;
-  final String password;
+  final String email;
   final String firstName;
   final String lastName;
-  final String email;
-  final String image;
   final String gender;
+  final String image;
   final String accessToken;
   final String refreshToken;
 
-  const User({
+  User({
     required this.id,
     required this.username,
-    required this.password,
+    required this.email,
     required this.firstName,
     required this.lastName,
-    required this.email,
-    required this.image,
     required this.gender,
+    required this.image,
     required this.accessToken,
     required this.refreshToken,
   });
@@ -27,12 +25,11 @@ class User {
     return User(
       id: json['id'] ?? 0,
       username: json['username'] ?? '',
-      password: json['password'] ?? '',
+      email: json['email'] ?? '',
       firstName: json['firstName'] ?? '',
       lastName: json['lastName'] ?? '',
-      email: json['email'] ?? '',
-      image: json['image'] ?? '',
       gender: json['gender'] ?? '',
+      image: json['image'] ?? '',
       accessToken: json['accessToken'] ?? '',
       refreshToken: json['refreshToken'] ?? '',
     );
@@ -42,12 +39,11 @@ class User {
     return {
       'id': id,
       'username': username,
-      'password': password,
+      'email': email,
       'firstName': firstName,
       'lastName': lastName,
-      'email': email,
-      'image': image,
       'gender': gender,
+      'image': image,
       'accessToken': accessToken,
       'refreshToken': refreshToken,
     };
